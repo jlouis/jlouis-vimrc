@@ -33,6 +33,8 @@ set incsearch
 set showfulltag
 set lazyredraw
 set noerrorbells
+set ignorecase
+set smartcase
 set visualbell t_vb=
 if has("autocmd")
     autocmd GUIEnter * set visualbell t_vb=
