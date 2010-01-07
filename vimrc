@@ -50,10 +50,11 @@ if has("syntax")
     syntax on
 endif
 set virtualedit=block,onemore
-if has("gui_gtk")
-    set guifont=DejaVu\ Sans\ Mono\ 10
-endif
+set guifont=DejaVu\ Sans\ Mono\ 8
+
 set background=light
+colorscheme default
+
 if has('gui')
     set guioptions-=m
     set guioptions-=T
