@@ -1,3 +1,6 @@
+" This vimrc file owes much -- if not everything -- to Ciaran McCreesh.
+" His configuration file was used for a start-point when building this one.
+
 scriptencoding utf-8
 
 "--- Terminal setup"
