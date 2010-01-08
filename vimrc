@@ -55,10 +55,10 @@ if has("syntax")
     syntax on
 endif
 set virtualedit=block,onemore
-set guifont=DejaVu\ Sans\ Mono\ 8
+set guifont=Terminus\ 11
 
-set background=light
-colorscheme default
+set background=dark
+colorscheme inkpot
 
 if has('gui')
     set guioptions-=m
@@ -69,6 +69,7 @@ if has('gui')
     set guioptions-=R
 end
 set shiftwidth=4
+set softtabstop=4
 set autoindent
 set smartindent
 inoremap # X<BS>#
