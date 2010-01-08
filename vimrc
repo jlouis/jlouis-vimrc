@@ -243,8 +243,8 @@ if has("eval")
     " If we're in a wide window, enable line numbers.
     fun! <SID>WindowWidth()
         if winwidth(0) > 90
-            setlocal foldcolumn=2
             setlocal number
+            setlocal foldcolumn=0
         else
             setlocal nonumber
             setlocal foldcolumn=0
