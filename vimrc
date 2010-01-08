@@ -56,11 +56,11 @@ if has("syntax")
 endif
 set virtualedit=block,onemore
 if hostname() == "illithid"
-    set guifont=Inconsolata\ 11
+    set guifont=Inconsolata\ 10
 elseif hostname() == "succubus"
     set guifont=Inconsolata\ 8
 else
-    set guifont=Inconsolata\ 11
+    set guifont=Inconsolata\ 10
 endif
 
 set background=dark
