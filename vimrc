@@ -55,7 +55,13 @@ if has("syntax")
     syntax on
 endif
 set virtualedit=block,onemore
-set guifont=Terminus\ 11
+if hostname() == "illithid"
+    set guifont=Terminus\ 11
+elseif hostname() == "succubus"
+    set guifont=Terminus\ 8
+else
+    set guifont=Terminus\ 11
+endif
 
 set background=dark
 colorscheme inkpot
@@ -197,10 +203,10 @@ set fillchars=fold:-
 
 " Filter expected errors from make
 if has("eval") && v:version >= 700
-    if hostname() == "snowcone"
-        let &makeprg="nice -n7 make -j4 2>&1"
-    elseif hostname() == "snowmobile"
+    if hostname() == "succubus"
         let &makeprg="nice -n7 make -j1 2>&1"
+    elseif hostname() == "illithid"
+        let &makeprg="nice -n7 make -j2 2>&1"
     else
         let &makeprg="nice -n7 make -j2 2>&1"
     endif
