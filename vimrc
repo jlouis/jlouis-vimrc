@@ -91,9 +91,6 @@ if has("eval")
     filetype plugin on
     filetype indent on
 endif
-set nomodeline
-let g:secure_modelines_verbose = 0
-let g:secure_modelines_modelines = 15
 set laststatus=2
 set statusline=
 set statusline+=%2*%-3.3n%0*\                " buffer number
@@ -258,47 +255,6 @@ if has("eval")
         wincmd K
         execute "resize" l:h
     endfun
- 
-    if v:version >= 700
-        " Load gcov marks
-        hi UncoveredSign guibg=#2e2e2e guifg=#e07070
-        hi CoveredSign guibg=#2e2e2e guifg=#70e070
-        sign define uncovered text=## texthl=UncoveredSign
-        sign define covered text=## texthl=CoveredSign
-        fun! <SID>LoadGcovMarks()
-            if ! filereadable(expand("%").".gcov")
-                return
-            endif
-            sign unplace *
-            for l:x in map(map(filter(readfile(expand("%").".gcov"),
-                        \ '! match(v:val, "^\\s*#\\+:")'),
-                        \ 'substitute(v:val,"^[^:]\\+:\\s*\\(\\d\\+\\):.*","\\1","")'),
-                        \ '":sign place " . v:val . " line=" . v:val . " name=uncovered " .
-                        \ "file=" . expand("%")')
-                exec l:x
-            endfor
-            for l:x in map(map(filter(readfile(expand("%").".gcov"),
-                        \ '! match(v:val, "^\\s*\\d\\+:")'),
-                        \ 'substitute(v:val,"^[^:]\\+:\\s*\\(\\d\\+\\):.*","\\1","")'),
-                        \ '":sign place " . v:val . " line=" . v:val . " name=covered " .
-                        \ "file=" . expand("%")')
-                exec l:x
-            endfor
-        endfun
- 
-        fun! <SID>UpdateCopyrightHeaders()
-            let l:a = 0
-            for l:x in getline(1, 10)
-                let l:a = l:a + 1
-                if -1 != match(l:x, 'Copyright (c) [- 0-9,]*200[456789] Ciaran McCreesh')
-                    if input("Update copyright header? (y/N) ") == "y"
-                        call setline(l:a, substitute(l:x, '\(20[01][456789]\) Ciaran',
-                                    \ '\1, 2010 Ciaran', ""))
-                    endif
-                endif
-            endfor
-        endfun
-    endif
 endif
 
 " autocmds
@@ -331,76 +287,12 @@ if has("autocmd") && has("eval")
                     \ if expand("<amatch>") !~# "ChangeLog" |
                     \     let b:is_bash = 1 | set filetype=sh |
                     \ endif
- 
-        " load gcov for c++ files
-        autocmd FileType cpp call <SID>LoadGcovMarks()
- 
-        " update copyright headers
-        autocmd BufWritePre * call <SID>UpdateCopyrightHeaders()
- 
+
         try
-            " if we have a vim which supports QuickFixCmdPost (vim7),
-            " give us an error window after running make, grep etc, but
-            " only if results are available.
             autocmd QuickFixCmdPost * botright cwindow 5
- 
-            autocmd QuickFixCmdPre make
-                        \ let g:make_start_time=localtime()
- 
-            let g:paludis_configure_command = "! ./configure --prefix=/usr --sysconfdir=/etc" .
-                        \ " --localstatedir=/var/lib --enable-qa " .
-                        \ " --enable-ruby --enable-python --enable-vim --enable-bash-completion" .
-                        \ " --enable-zsh-completion --with-repositories=all --with-clients=all --with-environments=all" .
-                        \ " --enable-visibility --enable-gnu-ldconfig --enable-htmltidy" .
-                        \ " --enable-ruby-doc --enable-python-doc --enable-xml"
- 
-            " Similarly, try to automatically run ./configure and / or
-            " autogen if necessary.
-            autocmd QuickFixCmdPre make
-                        \ if ! filereadable('Makefile') |
-                        \     if ! filereadable("configure") |
-                        \         if filereadable("autogen.bash") |
-                        \             exec "! ./autogen.bash" |
-                        \         elseif filereadable("quagify.sh") |
-                        \             exec "! ./quagify.sh" |
-                        \         endif |
-                        \     endif |
-                        \     if filereadable("configure") |
-                        \         if (isdirectory(getcwd() . "/paludis/util")) |
-                        \             exec g:paludis_configure_command |
-                        \         elseif (match(getcwd(), "libwrapiter") >= 0) |
-                        \             exec "! ./configure --prefix=/usr --sysconfdir=/etc" |
-                        \         else |
-                        \             exec "! ./configure" |
-                        \         endif |
-                        \     endif |
-                        \ endif
- 
-            autocmd QuickFixCmdPost make
-                        \ let g:make_total_time=localtime() - g:make_start_time |
-                        \ echo printf("Time taken: %dm%2.2ds", g:make_total_time / 60,
-                        \     g:make_total_time % 60)
- 
-            autocmd QuickFixCmdPre *
-                        \ let g:old_titlestring=&titlestring |
-                        \ let &titlestring="[ " . expand("<amatch>") . " ] " . &titlestring |
-                        \ redraw
- 
-            autocmd QuickFixCmdPost *
-                        \ let &titlestring=g:old_titlestring
- 
-            if hostname() == "snowmobile"
-                autocmd QuickFixCmdPre make
-                            \ let g:active_line=getpid() . " vim:" . substitute(getcwd(), "^.*/", "", "") |
-                            \ exec "silent !echo '" . g:active_line . "' >> ~/.config/awesome/active"
- 
-                autocmd QuickFixCmdPost make
-                            \ exec "silent !sed -i -e '/^" . getpid() . " /d' ~/.config/awesome/active"
-            endif
- 
         catch
         endtry
- 
+
         try
             autocmd Syntax *
                         \ syn match VimModelineLine /^.\{-1,}vim:[^:]\{-1,}:.*/ contains=VimModeline |
@@ -434,6 +326,8 @@ endif
 
 " Mappings
 nmap <F12> :make<CR>
+map <F1> <Esc>
+imap <F1> <Esc>
 
 " vim: set shiftwidth=4 softtabstop=4 expandtab tw=120                 :
 
