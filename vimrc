@@ -432,8 +432,21 @@ if has("autocmd")
     augroup END
 endif
 
+" Functions
+func GitGrep(...)
+    let save=&grepprg
+    set grepprg=git\ grep\ -n\ $*
+    let s = 'grep'
+    for i in a:000
+	let s = s . ' ' . i
+    endfor
+    exe s
+    let &grepprg = save
+endfun
+
 " Mappings
 nmap <F12> :make<CR>
+command -nargs=? G call GitGrep(<f-args>)
 
 " vim: set shiftwidth=4 softtabstop=4 expandtab tw=120                 :
 
