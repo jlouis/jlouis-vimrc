@@ -58,9 +58,9 @@ set virtualedit=block,onemore
 if hostname() == "illithid"
     set guifont=Inconsolata\ 10
 elseif hostname() == "succubus"
-    set guifont=Inconsolata\ 8
+    set guifont=Inconsolata\ 12
 else
-    set guifont=Inconsolata\ 10
+    set guifont=Inconsolata\ 12
 endif
 
 set background=dark
@@ -324,10 +324,22 @@ if has("autocmd")
     augroup END
 endif
 
+" Functions
+func GitGrep(...)
+    let save=&grepprg
+    set grepprg=git\ grep\ -n\ $*
+    let s = 'grep'
+    for i in a:000
+	let s = s . ' ' . i
+    endfor
+    exe s
+    let &grepprg = save
+endfun
+
 " Mappings
 nmap <F12> :make<CR>
 map <F1> <Esc>
 imap <F1> <Esc>
-
+command -nargs=? G call GitGrep(<f-args>)
 " vim: set shiftwidth=4 softtabstop=4 expandtab tw=120                 :
 
