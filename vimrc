@@ -91,6 +91,11 @@ if has("eval")
     filetype plugin on
     filetype indent on
 endif
+set grepprg=grep\ -nH\ $*
+let g:secure_modelines_verbose = 0
+let g:secure_modelines_modelines = 15
+let g:tex_flavor='latex'
+set iskeyword+=:
 set laststatus=2
 set statusline=
 set statusline+=%2*%-3.3n%0*\                " buffer number
