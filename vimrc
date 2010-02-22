@@ -25,6 +25,9 @@ endif
 "--- Settings"
 
 set nocompatible
+set enc=utf-8
+set tenc=utf-8
+set fileformat=unix
 set viminfo='1000,f1,:1000,/1000
 set history=500
 set backspace=indent,eol,start
@@ -34,11 +37,12 @@ set showmatch
 set hlsearch
 set incsearch
 set showfulltag
+set expandtab
 set lazyredraw
 set noerrorbells
 set ignorecase
 set smartcase
-set visualbell t_vb=
+set novisualbell
 if has("autocmd")
     autocmd GUIEnter * set visualbell t_vb=
 endif
@@ -51,9 +55,14 @@ set suffixes+=.in,.a,.1
 set hidden
 set winminheight=1
 
+let g:name = 'Jesper Louis Andersen'
+let g:email = 'jesper.louis.andersen@gmail.com'
+
 if has("syntax")
     syntax on
+    set popt+=syntax:y
 endif
+
 set virtualedit=block,onemore
 if hostname() == "illithid"
     set guifont=Inconsolata\ 10
@@ -74,6 +83,7 @@ if has('gui')
     set guioptions-=r
     set guioptions-=R
 end
+
 set shiftwidth=4
 set softtabstop=4
 set autoindent
@@ -85,12 +95,25 @@ if has("folding")
     set foldmethod=indent
     set foldlevelstart=99
 endif
-set popt+=syntax:y
+
 if has("eval")
     filetype on
     filetype plugin on
     filetype indent on
 endif
+
+if has("title")
+    set title
+endif
+
+if has("title") && (has("gui_running") || &title)
+    set titlestring=
+    set titlestring+=%f\ " file name
+    set titlestring+=%h%m%r%w
+    set titlestring+=\ -\ %{v:progname}
+    set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}
+endif
+
 set grepprg=grep\ -nH\ $*
 let g:secure_modelines_verbose = 0
 let g:secure_modelines_modelines = 15
@@ -100,6 +123,7 @@ set laststatus=2
 set statusline=
 set statusline+=%2*%-3.3n%0*\                " buffer number
 set statusline+=%f\                          " file name
+
 if has("eval")
     let g:scm_cache = {}
     fun! ScmInfo()
@@ -150,22 +174,6 @@ if has("autocmd")
                 \ exec oldwinnr . " wincmd w"
 endif
 
-" Nice window title
-if has('title') && (has('gui_running') || &title)
-    set titlestring=
-    set titlestring+=%f\                                              " file name
-    set titlestring+=%h%m%r%w                                         " flags
-    set titlestring+=\ -\ %{v:progname}                               " program name
-    set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}  " working directory
-endif
-
-" If possible, try to use a narrow number column.
-if v:version >= 700
-    try
-        setlocal numberwidth=3
-    catch
-    endtry
-endif
 
 " If possible and in gvim, use cursor row highlighting
 if has("gui_running") && v:version >= 700
@@ -221,12 +229,6 @@ if has("eval") && v:version >= 700
     let &errorformat="%-G%.%#Warning: no uniquely matching class member found for%.%#,".&errorformat
     let &errorformat="%-G%.%#Warning: documented function%.%#was not declared or defined.%.%#,".&errorformat
  
-    " paludis things
-    let &errorformat="%-G%.%#test_cases::FailTest::run()%.%#,".&errorformat
-    let &errorformat="%-G%.%#%\\w%\\+/%\\w%\\+-%[a-zA-Z0-9.%\\-_]%\\+:%\\w%\\+::%\\w%\\+%.%#,".&errorformat
-    let &errorformat="%-G%.%#Writing VDB entry to%.%#,".&errorformat
-    let &errorformat="%-G%\\(install%\\|upgrade%\\)_TEST> %.%#,".&errorformat
-
     " catch internal errors
     let &errorformat="%.%#Internal error at %.%# at %f:%l: %m,".&errorformat
 endif
