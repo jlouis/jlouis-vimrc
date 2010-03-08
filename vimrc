@@ -73,7 +73,8 @@ else
 endif
 
 set background=dark
-hi Normal guifg=#ffe97a guibg=#002b00
+hi Normal guifg=#ffe97a guibg=#00002b
+hi Cursor guibg=Brown
 
 " colorscheme inkpot
 
@@ -343,6 +344,14 @@ func GitGrep(...)
     endfor
     exe s
     let &grepprg = save
+endfun
+
+func Blue(...)
+    hi Normal guifg=#ffe97a guibg=#00002b
+endfun
+
+func Green(...)
+    hi Normal guifg=#ffe97a guibg=#002b00
 endfun
 
 " Mappings
