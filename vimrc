@@ -75,6 +75,7 @@ endif
 set background=dark
 hi Normal guifg=#ffe97a guibg=#00002b
 hi Cursor guibg=Brown
+hi Pmenu guifg=#fff4c0 guibg=#381900
 
 " colorscheme inkpot
 
