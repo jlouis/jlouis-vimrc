@@ -65,16 +65,17 @@ let g:email = 'jesper.louis.andersen@gmail.com'
 
 set virtualedit=block,onemore
 if hostname() == "illithid"
-    set guifont=Terminus\ 10
+    set guifont=DejaVu\ Sans\ Mono\ 8
 elseif hostname() == "succubus"
-    set guifont=Terminus\ 12
+    set guifont=DejaVu\ Sans\ Mono\ 10
 else
-    set guifont=Terminus\ 12
+    set guifont=DejaVu\ Sans\ Mono\ 10
 endif
 
-set background=dark
-hi Normal guifg=#ffe97a guibg=#00002b
+set background=light
+hi Normal guifg=#000000 guibg=#ffffea
 hi Cursor guibg=Brown
+hi StatusLine guifg=#eaffff guibg=#000000
 hi Pmenu guifg=#fff4c0 guibg=#381900
 
 " colorscheme inkpot
