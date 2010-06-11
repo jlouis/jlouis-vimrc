@@ -58,10 +58,10 @@ set winminheight=1
 let g:name = 'Jesper Louis Andersen'
 let g:email = 'jesper.louis.andersen@gmail.com'
 
-" if has("syntax")
-"    syntax on
-"    set popt+=syntax:y
-" endif
+if has("syntax")
+   syntax on
+   set popt+=syntax:y
+endif
 
 set virtualedit=block,onemore
 if hostname() == "illithid"
@@ -72,13 +72,7 @@ else
     set guifont=DejaVu\ Sans\ Mono\ 10
 endif
 
-set background=light
-hi Normal guifg=#000000 guibg=#ffffea
-hi Cursor guibg=Brown
-hi StatusLine guifg=#eaffff guibg=#000000
-hi Pmenu guifg=#fff4c0 guibg=#381900
-
-" colorscheme inkpot
+colorscheme inkpot
 
 if has('gui')
     set guioptions-=m
