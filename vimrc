@@ -65,7 +65,7 @@ endif
 
 set virtualedit=block,onemore
 if hostname() == "illithid"
-    set guifont=Inconsolata\ 10
+    set guifont=Inconsolata\ 12
 elseif hostname() == "succubus"
     set guifont=Inconsolata\ 12
 else
