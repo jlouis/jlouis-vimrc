@@ -1,7 +1,12 @@
 " This vimrc file owes much -- if not everything -- to Ciaran McCreesh.
 " His configuration file was used for a start-point when building this one.
 
+call pathogen#infect()
+
 scriptencoding utf-8
+
+let g:name = 'Jesper Louis Andersen'
+let g:email = 'jesper.louis.andersen@gmail.com'
 
 "--- Terminal setup"
 
@@ -32,7 +37,9 @@ set viminfo='1000,f1,:1000,/1000
 set history=500
 set backspace=indent,eol,start
 set backup
+set backupdir=~/.vim/backups
 set showcmd
+set undolevels=1000
 set showmatch
 set hlsearch
 set incsearch
@@ -55,8 +62,6 @@ set suffixes+=.in,.a,.1
 set hidden
 set winminheight=1
 
-let g:name = 'Jesper Louis Andersen'
-let g:email = 'jesper.louis.andersen@gmail.com'
 
 if has("syntax")
    syntax on
@@ -66,8 +71,8 @@ endif
 set virtualedit=block,onemore
 if hostname() == "illithid"
     set guifont=Inconsolata\ 12
-elseif hostname() == "succubus"
-    set guifont=Inconsolata\ 12
+elseif hostname() == "tiefling.local"
+    set guifont=Menlo:h12
 else
     set guifont=Inconsolata\ 12
 endif
@@ -105,6 +110,16 @@ if has("title")
     set title
 endif
 
+if has("gui")
+    set guioptions-=m
+    set guioptions-=T
+    set guioptions-=l
+    set guioptions-=L
+    set guioptions-=r
+    set guioptions-=R
+
+    set mousemodel=popup
+endif
 if has("title") && (has("gui_running") || &title)
     set titlestring=
     set titlestring+=%f\ " file name
@@ -122,23 +137,7 @@ set laststatus=2
 set statusline=
 set statusline+=%2*%-3.3n%0*\                " buffer number
 set statusline+=%f\                          " file name
-
-if has("eval")
-    let g:scm_cache = {}
-    fun! ScmInfo()
-        let l:key = getcwd()
-        if ! has_key(g:scm_cache, l:key)
-            if (isdirectory(getcwd() . "/.git"))
-                let g:scm_cache[l:key] = "[" . substitute(readfile(getcwd() . "/.git/HEAD", "", 1)[0],
-                            \ "^.*/", "", "") . "] "
-            else
-                let g:scm_cache[l:key] = ""
-            endif
-        endif
-        return g:scm_cache[l:key]
-    endfun
-    set statusline+=%{ScmInfo()}             " scm info
-endif
+set statusline+=%{fugitive#statusline()}     " git information
 set statusline+=%h%1*%m%r%w%0*               " flags
 set statusline+=\[%{strlen(&ft)?&ft:'none'}, " filetype
 set statusline+=%{&encoding},                " encoding
@@ -208,6 +207,22 @@ else
     endif
 endif
 
+if has("unix")
+    if !isdirectory(expand("~/.vim/"))
+        if !isdirectory(expand("~/.vim/backup/"))
+            !mkdir -p ~/.vim/backup/
+        endif
+
+        if !isdirectory(expand("~/.vim/temp/"))
+            !mkdir -p ~/.vim/temp/
+        endif
+    endif
+endif
+
+if filereadable("/usr/share/dict/words")
+    set dictionary=/usr/share/dict/words
+endif
+
 set fillchars=fold:-
 
 " Filter expected errors from make
@@ -216,6 +231,8 @@ if has("eval") && v:version >= 700
         let &makeprg="nice -n7 make -j1 2>&1"
     elseif hostname() == "illithid"
         let &makeprg="nice -n7 make -j2 2>&1"
+    elseif hostname() == "teifling.local"
+        let &makeprg="nice -n7 make -j4 2>&1"
     else
         let &makeprg="nice -n7 make -j2 2>&1"
     endif
@@ -247,7 +264,14 @@ if has("eval")
     fun! <SID>WindowWidth()
         if winwidth(0) > 90
             setlocal number
-            setlocal foldcolumn=0
+            setlocal foldcolumn=2
+
+            if v:version >= 700
+                try
+                    setlocal numberwidth=3
+                catch
+                endtry
+            endif
         else
             setlocal nonumber
             setlocal foldcolumn=0
@@ -261,6 +285,38 @@ if has("eval")
         wincmd K
         execute "resize" l:h
     endfun
+endif
+
+if has("eval")
+    if has("gui_running")
+        let g:showmarks_enable=1
+    else
+        let g:showmarks_enable=0
+        let loaded_showmarks=1
+    endif
+
+    let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
+
+    if has("autocmd")
+        fun! <SID>FixShowmarksColours()
+            if has('gui')
+                hi ShowMarksHLl gui=bold guifg=#a0a0e0 guibg=#2e2e2e
+                hi ShowMarksHLu gui=none guifg=#a0a0e0 guibg=#2e2e2e
+                hi ShowMarksHLo gui=none guifg=#a0a0e0 guibg=#2e2e2e
+                hi ShowMarksHLm gui=none guifg=#a0a0e0 guibg=#2e2e2e
+                hi SignColumn   gui=none guifg=#f0f0f8 guibg=#2e2e2e
+            endif
+        endfun
+        if v:version >= 700
+            autocmd VimEnter,Syntax,ColorScheme * call <SID>FixShowmarksColours()
+        else
+            autocmd VimEnter,Syntax * call <SID>FixShowmarksColours()
+        endif
+    endif
+endif
+
+if has("autocmd")
+    au VimEnter * nohls
 endif
 
 " autocmds
@@ -356,148 +412,4 @@ map <F1> <Esc>
 imap <F1> <Esc>
 command -nargs=? G call GitGrep(<f-args>)
 " vim: set shiftwidth=4 softtabstop=4 expandtab tw=120                 :
-
-" Various UTF-8 mappings
-" Superscripts
-imap <buffer> ^0 ⁰
-imap <buffer> ^1 ¹
-imap <buffer> ^2 ²
-imap <buffer> ^3 ³
-imap <buffer> ^4 ⁴
-imap <buffer> ^5 ⁵
-imap <buffer> ^6 ⁶
-imap <buffer> ^7 ⁷
-imap <buffer> ^8 ⁸
-imap <buffer> ^9 ⁹
-imap <buffer> ^+ ⁺
-imap <buffer> ^- ⁻
-imap <buffer> ^= ⁼
-imap <buffer> ^( ⁽
-imap <buffer> ^) ⁾
-imap <buffer> ^n ⁿ
-
-" Subscripts
-imap <buffer> \_0 ₀
-imap <buffer> \_1 ₁
-imap <buffer> \_2 ₂
-imap <buffer> \_3 ₃
-imap <buffer> \_4 ₄
-imap <buffer> \_5 ₅
-imap <buffer> \_6 ₆
-imap <buffer> \_7 ₇
-imap <buffer> \_8 ₈
-imap <buffer> \_9 ₉
-imap <buffer> \_+ ₊
-imap <buffer> \_- ₋
-imap <buffer> \_= ₌
-imap <buffer> \_( ₍
-
-" Arrows
-imap <buffer> \-> →
-imap <buffer> \<-- ←
-imap <buffer> \<--> ↔
-imap <buffer> \==> ⇒
-imap <buffer> \<== ⇐
-imap <buffer> \<==> ⇔
-"
-" Symbols from mathematics and logic, LaTeX style
-imap <buffer> \forall ∀
-imap <buffer> \exists ∃
-imap <buffer> \in ∈
-imap <buffer> \ni ∋
-imap <buffer> \empty ∅
-imap <buffer> \prod ∏
-imap <buffer> \sum ∑
-imap <buffer> \le ≤
-imap <buffer> \ge ≥
-imap <buffer> \pm ±
-imap <buffer> \subset ⊂
-imap <buffer> \subseteq ⊆
-imap <buffer> \supset ⊃
-imap <buffer> \supseteq ⊇
-imap <buffer> \setminus ∖
-imap <buffer> \cap ∩
-imap <buffer> \cup ∪
-imap <buffer> \int ∫
-imap <buffer> \therefore ∴
-imap <buffer> \qed ∎
-imap <buffer> \1 𝟙
-imap <buffer> \N ℕ
-imap <buffer> \Z ℤ
-imap <buffer> \C ℂ
-imap <buffer> \Q ℚ
-imap <buffer> \R ℝ
-imap <buffer> \E 𝔼
-imap <buffer> \F 𝔽
-imap <buffer> \to →
-imap <buffer> \mapsto ↦
-imap <buffer> \infty ∞
-imap <buffer> \cong ≅
-imap <buffer> \:= ≔
-imap <buffer> \=: ≕
-imap <buffer> \ne ≠
-imap <buffer> \approx ≈
-imap <buffer> \perp ⊥
-imap <buffer> \not ̷
-imap <buffer> \ldots …
-imap <buffer> \cdots ⋯
-imap <buffer> \cdot ⋅
-imap <buffer> \circ ◦
-imap <buffer> \times ×
-imap <buffer> \oplus ⊕
-imap <buffer> \langle ⟨
-imap <buffer> \rangle ⟩
-
-" Greek alphabet...
-imap <buffer> \alpha α
-imap <buffer> \beta β
-imap <buffer> \gamma γ
-imap <buffer> \delta δ
-imap <buffer> \epsilon ε
-imap <buffer> \zeta ζ
-imap <buffer> \nu η
-imap <buffer> \theta θ
-imap <buffer> \iota ι
-imap <buffer> \kappa κ
-imap <buffer> \lambda λ
-imap <buffer> \mu μ
-imap <buffer> \nu ν
-imap <buffer> \xi ξ
-imap <buffer> \omicron ο
-imap <buffer> \pi π
-imap <buffer> \rho ρ
-imap <buffer> \stigma ς
-imap <buffer> \sigma σ
-imap <buffer> \tau τ
-imap <buffer> \upsilon υ
-imap <buffer> \phi ϕ
-imap <buffer> \varphi φ
-imap <buffer> \chi χ
-imap <buffer> \psi ψ
-imap <buffer> \omega ω
-
-imap <buffer> \Alpha Α
-imap <buffer> \Beta Β
-imap <buffer> \Gamma Γ
-imap <buffer> \Delta Δ
-imap <buffer> \Epsilon Ε
-imap <buffer> \Zeta Ζ
-imap <buffer> \Nu Η
-imap <buffer> \Theta Θ
-imap <buffer> \Iota Ι
-imap <buffer> \Kappa Κ
-imap <buffer> \Lambda Λ
-imap <buffer> \Mu Μ
-imap <buffer> \Nu Ν
-imap <buffer> \Xi Ξ
-imap <buffer> \Omicron Ο
-imap <buffer> \Pi Π
-imap <buffer> \Rho Ρ
-imap <buffer> \Sigma Σ
-imap <buffer> \Tau Τ
-imap <buffer> \Upsilon Υ
-imap <buffer> \Phi Φ
-imap <buffer> \Chi Χ
-imap <buffer> \Psi Ψ
-imap <buffer> \Omega Ω
 
