@@ -8,7 +8,25 @@ scriptencoding utf-8
 let g:name = 'Jesper Louis Andersen'
 let g:email = 'jesper.louis.andersen@gmail.com'
 
-"--- Terminal setup"
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" Bundles to manage
+Bundle 'gmarik/vundle'
+
+Bundle 'tpope/vim-fugitive'
+
+Bundle 'honza/snipmate-snippets'
+Bundle 'tomtom/tlib_vim'
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-markdown'
+Bundle 'tsaleh/vim-matchit'
+Bundle 'tpope/vim-repeat'
+Bundle 'garbas/vim-snipmate'
+Bundle 'tpope/vim-surround'
+Bundle 'jimenezrick/vimerl'
 
 if (&term =~ "xterm") && (&termencoding == "")
     set termencoding=utf-8
@@ -79,14 +97,16 @@ endif
 
 colorscheme inkpot
 
-if has('gui')
+if has("gui")
     set guioptions-=m
     set guioptions-=T
     set guioptions-=l
     set guioptions-=L
     set guioptions-=r
     set guioptions-=R
-end
+
+    set mousemodel=popup
+endif
 
 set shiftwidth=4
 set softtabstop=4
@@ -110,16 +130,6 @@ if has("title")
     set title
 endif
 
-if has("gui")
-    set guioptions-=m
-    set guioptions-=T
-    set guioptions-=l
-    set guioptions-=L
-    set guioptions-=r
-    set guioptions-=R
-
-    set mousemodel=popup
-endif
 if has("title") && (has("gui_running") || &title)
     set titlestring=
     set titlestring+=%f\ " file name
