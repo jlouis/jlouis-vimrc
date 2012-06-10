@@ -399,26 +399,6 @@ if has("autocmd")
     augroup END
 endif
 
-" Functions
-func GitGrep(...)
-    let save=&grepprg
-    set grepprg=git\ grep\ -n\ $*
-    let s = 'grep'
-    for i in a:000
-	let s = s . ' ' . i
-    endfor
-    exe s
-    let &grepprg = save
-endfun
-
-func Blue(...)
-    hi Normal guifg=#ffe97a guibg=#00002b
-endfun
-
-func Green(...)
-    hi Normal guifg=#ffe97a guibg=#002b00
-endfun
-
 " Mappings
 nmap <F12> :make<CR>
 map <F1> <Esc>
