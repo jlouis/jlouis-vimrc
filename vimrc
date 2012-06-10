@@ -23,6 +23,7 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-markdown'
 Bundle 'tsaleh/vim-matchit'
+Bundle 'tsaleh/vim-align'
 Bundle 'tpope/vim-repeat'
 Bundle 'garbas/vim-snipmate'
 Bundle 'tpope/vim-surround'
@@ -89,6 +90,8 @@ endif
 set virtualedit=block,onemore
 if hostname() == "illithid"
     set guifont=Inconsolata\ 12
+elseif hostname() == "myrddraal"
+    set guifont=Droid\ Sans\ Mono\ 10
 elseif hostname() == "tiefling.local"
     set guifont=Menlo:h12
 else
