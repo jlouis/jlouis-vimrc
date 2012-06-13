@@ -1,13 +1,12 @@
 " This vimrc file owes much -- if not everything -- to Ciaran McCreesh.
 " His configuration file was used for a start-point when building this one.
-
-call pathogen#infect()
-
 scriptencoding utf-8
-
+" Name Setup {{{
 let g:name = 'Jesper Louis Andersen'
 let g:email = 'jesper.louis.andersen@gmail.com'
-
+" }}}
+" Vundle Setup {{{
+call pathogen#infect()
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
@@ -15,12 +14,16 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 Bundle 'tpope/vim-fugitive'
-
-Bundle 'honza/snipmate-snippets'
+Bundle 'mattn/gist-vim'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdtree'
+Bundle 'jeetsukumaran/vim-buffergator'
+Bundle 'vim-scripts/vimwiki'
+Bundle 'majutsushi/tagbar'
+Bundle 'kana/vim-tabpagecd'
 Bundle 'tomtom/tlib_vim'
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'altercation/vim-colors-solarized'
-Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-markdown'
 Bundle 'tsaleh/vim-matchit'
 Bundle 'tsaleh/vim-align'
@@ -28,7 +31,9 @@ Bundle 'tpope/vim-repeat'
 Bundle 'garbas/vim-snipmate'
 Bundle 'tpope/vim-surround'
 Bundle 'jimenezrick/vimerl'
-
+Bundle 'ciaranm/detectindent'
+" }}}
+" Initialize {{{
 if (&term =~ "xterm") && (&termencoding == "")
     set termencoding=utf-8
 endif
@@ -46,22 +51,54 @@ if &term =~ "xterm"
     endif
 endif
 
-"--- Settings"
+" Always jump to the last known cursor position.
+autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+" }}}
+" Vimrc edit & reload {{{
+    nno <leader>Ve :tabedit $MYVIMRC<CR>
+    nno <leader>Vr :source $MYVIMRC<CR>
+" }}}
+" Tabs {{{
+map <D-1> :tabnext 1<CR>
+map <D-2> :tabnext 2<CR>
+map <D-3> :tabnext 3<CR>
+map <D-4> :tabnext 4<CR>
+map <D-5> :tabnext 5<CR>
+map <D-6> :tabnext 6<CR>
+map <D-7> :tabnext 7<CR>
+map <D-8> :tabnext 8<CR>
+map <D-9> :tabnext 9<CR>
+map <D-0> :tabnext 10<CR>
+" }}}
+" Undo & history {{{
+    set history=5000
+    set undolevels=5000
+    " make sure tmp dir is created
+    silent execute '!mkdir ~/.vim/tmp > /dev/null 2>&1'
+    " delete junk older than 3 days
+    silent execute '!find ~/.vim/tmp/ -type f -mtime +3 -exec rm {} \;'
+    set undofile
+    set undodir=~/.vim/tmp//
+    set backup
+    set backupdir=~/.vim/tmp//
+" }}}
+"Main Settings {{{"
 
 set nocompatible
 set enc=utf-8
 set tenc=utf-8
 set fileformat=unix
 set viminfo='1000,f1,:1000,/1000
-set history=500
 set backspace=indent,eol,start
-set backup
-set backupdir=~/.vim/backups
 set showcmd
-set undolevels=1000
 set showmatch
 set hlsearch
 set incsearch
+set antialias
 set showfulltag
 set expandtab
 set lazyredraw
@@ -75,31 +112,74 @@ endif
 set scrolloff=3
 set sidescrolloff=2
 set whichwrap+=<,>,[,]
+" Wildmenu {{{
 set wildmenu
+set wildmode=list:full
+
+set wildignore+=.hg,.git,.svn
+set wildignore+=*.aux,*.out,*.toc
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest
+set wildignore+=*.spl
+set wildignore+=*.sw?
+set wildignore+=*.DS_Store
+set wildignore+=*.luac
+set wildignore+=migrations
+set wildignore+=*.pyc
+set wildignore+=*.beam
 set wildignore+=*.o,*~,.lo
+" }}}
+" Omnicomplete {{{
+set completeopt=longest,menuone
+set cpoptions+=$
+set ofu=syntaxcomplete#Complete
+" }}}
 set suffixes+=.in,.a,.1
 set hidden
 set winminheight=1
-
+set virtualedit=block,onemore
+" Tabs {{{
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+set smartindent
+inoremap # X<BS>#
+" }}}
+" Folding {{{
+if has("folding")
+    set foldlevelstart=0
+    set foldcolumn=0
+    set foldenable
+    set foldlevel=99
+    set foldmethod=marker
+endif
+" }}}
+" Filetypes {{{
+if has("eval")
+    filetype on
+    filetype plugin on
+    filetype indent on
+endif
+" }}}
 
 if has("syntax")
    syntax on
    set popt+=syntax:y
 endif
 
-set virtualedit=block,onemore
 if hostname() == "illithid"
     set guifont=Inconsolata\ 12
 elseif hostname() == "myrddraal"
     set guifont=Droid\ Sans\ Mono\ 10
 elseif hostname() == "tiefling.local"
     set guifont=Menlo:h12
+elseif hostname() == "tiefling.issuu.com"
+    set guifont=Menlo:h12
 else
     set guifont=Inconsolata\ 12
 endif
 
 colorscheme inkpot
-
 if has("gui")
     set guioptions-=m
     set guioptions-=T
@@ -110,24 +190,7 @@ if has("gui")
 
     set mousemodel=popup
 endif
-
-set shiftwidth=4
-set softtabstop=4
-set autoindent
-set smartindent
-inoremap # X<BS>#
-
-if has("folding")
-    set foldenable
-    set foldmethod=indent
-    set foldlevelstart=99
-endif
-
-if has("eval")
-    filetype on
-    filetype plugin on
-    filetype indent on
-endif
+" }}}
 
 if has("title")
     set title
@@ -204,7 +267,7 @@ let &inc.=' ["<]'
 if (&termencoding == "utf-8") || has("gui_running")
     if v:version >= 700
         if has("gui_running")
-            set list listchars=tab:»·,trail:·,extends:…,nbsp:‗
+            set list listchars=tab:»·,trail:·,extends:…,nbsp:‗,precedes:…
         else
             " xterm + terminus hates these
             set list listchars=tab:»·,trail:·,extends:>,nbsp:_
@@ -301,31 +364,6 @@ if has("eval")
 endif
 
 if has("eval")
-    if has("gui_running")
-        let g:showmarks_enable=1
-    else
-        let g:showmarks_enable=0
-        let loaded_showmarks=1
-    endif
-
-    let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
-
-    if has("autocmd")
-        fun! <SID>FixShowmarksColours()
-            if has('gui')
-                hi ShowMarksHLl gui=bold guifg=#a0a0e0 guibg=#2e2e2e
-                hi ShowMarksHLu gui=none guifg=#a0a0e0 guibg=#2e2e2e
-                hi ShowMarksHLo gui=none guifg=#a0a0e0 guibg=#2e2e2e
-                hi ShowMarksHLm gui=none guifg=#a0a0e0 guibg=#2e2e2e
-                hi SignColumn   gui=none guifg=#f0f0f8 guibg=#2e2e2e
-            endif
-        endfun
-        if v:version >= 700
-            autocmd VimEnter,Syntax,ColorScheme * call <SID>FixShowmarksColours()
-        else
-            autocmd VimEnter,Syntax * call <SID>FixShowmarksColours()
-        endif
-    endif
 endif
 
 if has("autocmd")
@@ -406,3 +444,93 @@ imap <F1> <Esc>
 command -nargs=? G call GitGrep(<f-args>)
 " vim: set shiftwidth=4 softtabstop=4 expandtab tw=120                 :
 
+" Language-specific settings {{{
+    " Erlang {{{
+        let g:erlang_folding = 1
+        let g:erlangRefactoring = 1
+    " }}}
+    " Python {{{
+        " pyflakes quickfix conflicting with RGrep/Ack quickfix results
+        let g:pyflakes_use_quickfix = 0
+        let python_highlight_all = 1
+        autocmd BufWritePre *.py normal m`:%s/\s\+$//e ``
+        autocmd FileType python set omnifunc=pythoncomplete#Complete
+    " }}}
+" }}}
+" Plugin Settings {{{
+    " Tagbar {{{
+        nmap <F8> :TagbarToggle<CR>
+        let g:tagbar_autofocus = 1
+        let g:tagbar_compact = 1
+    " }}}
+    " NERDTree {{{
+        map <Leader>n :NERDTreeToggle<CR>
+        let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\.beam$', '\~$']
+        let NERDTreeHijackNetrw=1
+        let NERDTreeQuitOnOpen=0
+        let NERDTreeShowBookmarks=0
+        let NERDTreeShowFiles=1
+        let NERDTreeStatusline=0
+        let NERDTreeMinimalUI=1
+        let NERDTreeChDirMode=2
+        let NERDChristmasTree=1
+        let NERDTreeDirArrows=1
+        let NERDTreeWinSize=20
+    " }}}
+    " Wimviki {{{
+        map <leader>W <Plug>VimwikiIndex
+    " }}}
+    " Json {{{
+        map <leader>J <Esc>:%!json_xs -f json -t json-pretty<CR> " format json
+    " }}}
+    " Buffergator {{{
+        let g:buffergator_viewport_split_policy = "T"
+        let g:buffergator_sort_regime = "mru"
+        let g:buffergator_split_size = 10
+        let g:buffergator_autodismiss_on_select = 1
+    " }}}
+    " Showmarks {{{
+        let g:showmarks_ignore_type="hprmq"
+        let g:showmarks_include="qwertyuiopasdfghjklzxcvbnm"
+        nno ' `
+        if has("gui_running")
+             let g:showmarks_enable=1
+        else
+            let g:showmarks_enable=0
+            let loaded_showmarks=1
+        endif
+
+        if has("autocmd")
+            fun! <SID>FixShowmarksColours()
+                if has('gui')
+                    hi ShowMarksHLl gui=bold guifg=#a0a0e0 guibg=#2e2e2e
+                    hi ShowMarksHLu gui=none guifg=#a0a0e0 guibg=#2e2e2e
+                    hi ShowMarksHLo gui=none guifg=#a0a0e0 guibg=#2e2e2e
+                    hi ShowMarksHLm gui=none guifg=#a0a0e0 guibg=#2e2e2e
+                    hi SignColumn   gui=none guifg=#f0f0f8 guibg=#2e2e2e
+                endif
+            endfun
+            if v:version >= 700
+                autocmd VimEnter,Syntax,ColorScheme * call <SID>FixShowmarksColours()
+            else
+                autocmd VimEnter,Syntax * call <SID>FixShowmarksColours()
+            endif
+        endif
+    " }}}
+    " Gist {{{
+        let g:gist_clip_command = 'pbcopy'
+        let g:gist_detect_filetype = 1
+    " }}}
+" }}}
+" Other {{{
+    " Highlight word {{{
+    hi Wtf1         guifg=#000000 guibg=#00ff00 gui=NONE
+    hi Wtf2         guifg=#ffffff guibg=#ff0000 gui=NONE
+    hi Wtf3         guifg=#000000 guibg=#ffff00 gui=NONE
+    nnoremap <silent> <leader>hh :execute 'match Wtf1 /\<<c-r><c-w>\>/'<cr>
+    nnoremap <silent> <leader>h1 :execute 'match Wtf1 /\<<c-r><c-w>\>/'<cr>
+    nnoremap <silent> <leader>h2 :execute '2match Wtf2 /\<<c-r><c-w>\>/'<cr>
+    nnoremap <silent> <leader>h3 :execute '3match Wtf3 /\<<c-r><c-w>\>/'<cr>
+
+    " }}}
+" }}}
