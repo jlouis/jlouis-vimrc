@@ -6,3 +6,6 @@
 /doc/*
 /compiler/*
 .netrwhist
+/bundle/
+/tmp/
+
