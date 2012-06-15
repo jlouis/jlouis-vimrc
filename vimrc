@@ -50,13 +50,6 @@ if &term =~ "xterm"
         let &t_EI = "\<Esc>]12;grey80\x7"
     endif
 endif
-
-" Always jump to the last known cursor position.
-autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
-
 " }}}
 " Vimrc edit & reload {{{
     nno <leader>Ve :tabedit $MYVIMRC<CR>
