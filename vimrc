@@ -140,7 +140,7 @@ inoremap # X<BS>#
 " }}}
 " Folding {{{
 if has("folding")
-    set foldlevelstart=0
+    set foldlevelstart=99
     set foldcolumn=0
     set foldenable
     set foldlevel=99
