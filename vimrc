@@ -156,6 +156,8 @@ if hostname() == "illithid"
     set guifont=Inconsolata\ 13
 elseif hostname() == "myrddraal"
     set guifont=Droid\ Sans\ Mono\ 11
+elseif hostname() == "daemonette"
+    set guifont=Monospace\ 11
 elseif hostname() == "tiefling"
     set guifont=Menlo:h13
 elseif hostname() == "tiefling.local"
