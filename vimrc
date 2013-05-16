@@ -138,15 +138,6 @@ set autoindent
 set smartindent
 inoremap # X<BS>#
 " }}}
-" Folding {{{
-if has("folding")
-    set foldlevelstart=99
-    set foldcolumn=0
-    set foldenable
-    set foldlevel=99
-    set foldmethod=marker
-endif
-" }}}
 " Filetypes {{{
 if has("eval")
     filetype on
@@ -161,15 +152,17 @@ if has("syntax")
 endif
 
 if hostname() == "illithid"
-    set guifont=Inconsolata\ 12
+    set guifont=Inconsolata\ 13
 elseif hostname() == "myrddraal"
-    set guifont=Droid\ Sans\ Mono\ 10
+    set guifont=Droid\ Sans\ Mono\ 11
+elseif hostname() == "tiefling"
+    set guifont=Menlo:h13
 elseif hostname() == "tiefling.local"
-    set guifont=Menlo:h12
+    set guifont=Menlo:h13
 elseif hostname() == "tiefling.issuu.com"
-    set guifont=Menlo:h12
+    set guifont=Menlo:h13
 else
-    set guifont=Inconsolata\ 12
+    set guifont=Inconsolata\ 13
 endif
 
 colorscheme inkpot
@@ -300,7 +293,7 @@ if has("eval") && v:version >= 700
         let &makeprg="nice -n7 make -j1 2>&1"
     elseif hostname() == "illithid"
         let &makeprg="nice -n7 make -j2 2>&1"
-    elseif hostname() == "teifling.local"
+    elseif hostname() == "teifling"
         let &makeprg="nice -n7 make -j4 2>&1"
     else
         let &makeprg="nice -n7 make -j2 2>&1"
@@ -333,7 +326,6 @@ if has("eval")
     fun! <SID>WindowWidth()
         if winwidth(0) > 90
             setlocal number
-            setlocal foldcolumn=2
 
             if v:version >= 700
                 try
@@ -343,7 +335,6 @@ if has("eval")
             endif
         else
             setlocal nonumber
-            setlocal foldcolumn=0
         endif
     endfun
  
@@ -419,11 +410,11 @@ if has("autocmd")
                     \ 0put ='#!/usr/bin/ruby' | set sw=4 sts=4 et tw=80 |
                     \ norm G
  
-        autocmd BufNewFile *.hh 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
+        autocmd BufNewFile *.hh 0put ='/* vim: set sw=4 sts=4 et : */' |
                     \ 1put ='' | call MakeIncludeGuards() |
                     \ set sw=4 sts=4 et tw=80 | norm G
  
-        autocmd BufNewFile *.cc 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
+        autocmd BufNewFile *.cc 0put ='/* vim: set sw=4 sts=4 et : */' |
                     \ 1put ='' | 2put ='' | call setline(3, '#include "' .
                     \ substitute(expand("%:t"), ".cc$", ".hh", "") . '"') |
                     \ set sw=4 sts=4 et tw=80 | norm G
@@ -439,7 +430,6 @@ command -nargs=? G call GitGrep(<f-args>)
 
 " Language-specific settings {{{
     " Erlang {{{
-        let g:erlang_folding = 1
         let g:erlangRefactoring = 1
     " }}}
     " Python {{{
