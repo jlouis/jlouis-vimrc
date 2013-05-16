@@ -24,6 +24,7 @@ Bundle 'kana/vim-tabpagecd'
 Bundle 'tomtom/tlib_vim'
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'chriskempson/base16-vim'
 Bundle 'tpope/vim-markdown'
 Bundle 'tsaleh/vim-matchit'
 Bundle 'tsaleh/vim-align'
@@ -165,7 +166,8 @@ else
     set guifont=Inconsolata\ 13
 endif
 
-colorscheme inkpot
+set background=dark
+colorscheme base16-tomorrow
 if has("gui")
     set guioptions-=m
     set guioptions-=T
@@ -425,7 +427,7 @@ endif
 nmap <F12> :make<CR>
 map <F1> <Esc>
 imap <F1> <Esc>
-command -nargs=? G call GitGrep(<f-args>)
+command -nargs=? G call Ggrep(<f-args>)
 " vim: set shiftwidth=4 softtabstop=4 expandtab tw=120                 :
 
 " Language-specific settings {{{
