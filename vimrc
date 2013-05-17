@@ -14,6 +14,7 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 Bundle 'tpope/vim-fugitive'
+Bundle 'kien/ctrlp.vim'
 Bundle 'mattn/gist-vim'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
@@ -445,6 +446,12 @@ command -nargs=? G call Ggrep(<f-args>)
     " }}}
 " }}}
 " Plugin Settings {{{
+    " Ctrl-P {{{
+        let g:ctrlp_map = '<c-p>'
+        let g:ctrlp_cmd = 'CtrlP'
+
+        let g:ctrlp_working_path_mode = 'ra'
+        let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
     " Tagbar {{{
         nmap <F8> :TagbarToggle<CR>
         let g:tagbar_autofocus = 1
