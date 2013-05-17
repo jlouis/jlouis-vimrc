@@ -169,7 +169,7 @@ else
 endif
 
 set background=dark
-colorscheme base16-tomorrow
+colorscheme inkpot
 if has("gui")
     set guioptions-=m
     set guioptions-=T
