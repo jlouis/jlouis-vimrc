@@ -6,7 +6,7 @@ let g:name = 'Jesper Louis Andersen'
 let g:email = 'jesper.louis.andersen@gmail.com'
 " }}}
 " Vundle Setup {{{
-call pathogen#infect()
+execute pathogen#infect()
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
@@ -17,7 +17,6 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'kien/ctrlp.vim'
 Bundle 'mattn/gist-vim'
 Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
 Bundle 'jeetsukumaran/vim-buffergator'
 Bundle 'vim-scripts/vimwiki'
 Bundle 'majutsushi/tagbar'
@@ -27,7 +26,6 @@ Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'chriskempson/base16-vim'
 Bundle 'tpope/vim-markdown'
-Bundle 'tsaleh/vim-matchit'
 Bundle 'tsaleh/vim-align'
 Bundle 'tpope/vim-repeat'
 Bundle 'garbas/vim-snipmate'
@@ -159,6 +157,12 @@ elseif hostname() == "myrddraal"
     set guifont=Droid\ Sans\ Mono\ 11
 elseif hostname() == "daemonette"
     set guifont=Monospace\ 11
+elseif hostname() == "quasitl"
+    set guifont=Menlo:h13
+elseif hostname() == "quasit.local"
+    set guifont=Menlo:h13
+elseif hostname() == "quasit.issuu.com"
+    set guifont=Menlo:h13
 elseif hostname() == "tiefling"
     set guifont=Menlo:h13
 elseif hostname() == "tiefling.local"
@@ -169,8 +173,8 @@ else
     set guifont=Inconsolata\ 13
 endif
 
-set background=dark
-colorscheme inkpot
+set background=light
+colorscheme solarized
 if has("gui")
     set guioptions-=m
     set guioptions-=T
