@@ -10,26 +10,26 @@ execute pathogen#infect()
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-" Bundles to manage
-Bundle 'gmarik/vundle'
+" Plugins to manage
+Plugin 'gmarik/vundle'
 
-Bundle 'tpope/vim-fugitive'
-Bundle 'kien/ctrlp.vim'
-Bundle 'mattn/gist-vim'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'jeetsukumaran/vim-buffergator'
-Bundle 'kana/vim-tabpagecd'
-Bundle 'tomtom/tlib_vim'
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'chriskempson/base16-vim'
-Bundle 'tpope/vim-markdown'
-Bundle 'tsaleh/vim-align'
-Bundle 'tpope/vim-repeat'
-Bundle 'garbas/vim-snipmate'
-Bundle 'tpope/vim-surround'
-Bundle 'jimenezrick/vimerl'
-Bundle 'ciaranm/detectindent'
+Plugin 'tpope/vim-fugitive'
+Plugin 'kien/ctrlp.vim'
+Plugin 'mattn/gist-vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'jeetsukumaran/vim-buffergator'
+Plugin 'kana/vim-tabpagecd'
+Plugin 'tomtom/tlib_vim'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'chriskempson/base16-vim'
+Plugin 'tpope/vim-markdown'
+Plugin 'tsaleh/vim-align'
+Plugin 'tpope/vim-repeat'
+Plugin 'garbas/vim-snipmate'
+Plugin 'tpope/vim-surround'
+Plugin 'jimenezrick/vimerl'
+Plugin 'ciaranm/detectindent'
 " }}}
 " Initialize {{{
 if (&term =~ "xterm") && (&termencoding == "")
@@ -244,7 +244,7 @@ endif
 
 " If possible and in gvim, use cursor row highlighting
 if has("gui_running") && v:version >= 700
-    set cursorline
+    set nocursorline
 end
 set guicursor+=a:blinkon0
 
@@ -458,20 +458,6 @@ command -nargs=? G call Ggrep(<f-args>)
         nmap <F8> :TagbarToggle<CR>
         let g:tagbar_autofocus = 1
         let g:tagbar_compact = 1
-    " }}}
-    " NERDTree {{{
-        map <Leader>n :NERDTreeToggle<CR>
-        let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\.beam$', '\~$']
-        let NERDTreeHijackNetrw=1
-        let NERDTreeQuitOnOpen=0
-        let NERDTreeShowBookmarks=0
-        let NERDTreeShowFiles=1
-        let NERDTreeStatusline=0
-        let NERDTreeMinimalUI=1
-        let NERDTreeChDirMode=2
-        let NERDChristmasTree=1
-        let NERDTreeDirArrows=1
-        let NERDTreeWinSize=20
     " }}}
     " Wimviki {{{
         map <leader>W <Plug>VimwikiIndex
